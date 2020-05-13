@@ -15,3 +15,9 @@
   systemd:
     name: nginx
     state: reloaded
+
+- name: restart rsyslog
+  service:
+    name: rsyslog
+    state: restarted
+    enabled: yes

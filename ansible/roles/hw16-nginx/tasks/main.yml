@@ -40,7 +40,7 @@
   tags:
     - nginx-testpage
 
-- name: Place rsyslog.conf
+- name: SYSLOG | Place rsyslog.conf
   template:
     src: rsyslog.conf.j2
     dest: /etc/rsyslog.conf
@@ -49,29 +49,37 @@
   notify:
     - restart rsyslog
 
-- name: Place auditd.conf
+- name: AUDISPD | Install audispd-plugins package
+  yum:
+    name: audispd-plugins
+    state: latest
+  tags:
+    - audispd-plugins-package
+    - packages
+
+- name: AUDITD | Place auditd.conf
   template:
     src: ../templates/auditd.conf.j2
     dest: /etc/audit/auditd.conf
   tags:
     - auditd
 
-- name: Place au-remote.conf
+- name: AUDISPD | Place au-remote.conf
   template:
     src: ../templates/au-remote.conf.j2
     dest: /etc/audisp/plugins.d/au-remote.conf
   tags:
     - auditd
 
-- name: Place audisp-remote.conf
+- name: AUDISPD | Place audisp-remote.conf
   template:
     src: ../templates/audisp-remote.conf.j2
     dest: /etc/audisp/audisp-remote.conf
   tags:
     - auditd
 
-- name: Audit watch nginx
-  command: auditctl -w /etc/nginx/ -p aw -k nginx_watch
+- name: AUDITD | Add rule for watch nginx configs
+  command: echo "-w /etc/nginx/ -p aw -k nginx_watch" >>/etc/audit/rules.d/audit.rules
 
 - name: Reboot web
   reboot:

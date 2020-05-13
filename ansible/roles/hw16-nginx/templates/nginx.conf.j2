@@ -8,12 +8,8 @@ http {
     root /usr/share/nginx/html;
 
     access_log syslog:server=192.168.11.102:514,tag=nginx,severity=info;
-    0error_log syslog:server=192.168.11.102:514,tag=nginx,severity=info;
-    access_log  /var/log/nginx/access.log crit;
+    error_log syslog:server=192.168.11.102:514,tag=nginx,severity=info;
+    access_log  /var/log/nginx/access.log;
     error_log  /var/log/nginx/error.log crit;
-
-
-    location / {
-    }
   }
 }
