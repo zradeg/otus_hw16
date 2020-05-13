@@ -1,0 +1,14 @@
+---
+- name: logger
+  hosts: logger
+  gather_facts: false
+  roles:
+    - hw16-logger
+  become: true
+
+- name: web
+  hosts: web
+  gather_facts: false
+  roles:
+    - hw16-nginx
+  become: true

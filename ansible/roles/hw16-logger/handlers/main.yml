@@ -1,0 +1,22 @@
+---
+- name: start rsyslog
+  systemd:
+    name: rsyslog
+    state: started
+    enabled: yes
+
+- name: restart rsyslog
+  systemd:
+    name: rsyslog
+    state: restarted
+    enabled: yes
+
+- name: reload rsyslog
+  systemd:
+    name: rsyslog
+    state: reloaded
+
+- name: restart auditd
+  systemd:
+    name: auditd
+    state: restarted

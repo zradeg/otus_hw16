@@ -1,0 +1,77 @@
+---
+- name: NGINX | Install EPEL Repo package from standart repo
+  yum:
+    name: epel-release
+    state: present
+  tags:
+    - epel-package
+    - packages
+
+- name: NGINX | Install nginx package from EPEL Repo
+  yum:
+    name: nginx
+    state: latest
+  notify:
+    - restart nginx
+  tags:
+    - nginx-package
+    - packages
+
+- name: NGINX | Create NGINX config file from template
+  template:
+    src: ../templates/nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+  notify:
+    - reload nginx
+  tags:
+    - nginx-configuration
+
+- name: NGINX | Create NGINX vhost config file from template
+  template:
+    src: ../templates/nginx_vhost.conf.j2
+    dest: /etc/nginx/conf.d/default.conf
+  notify:
+    - reload nginx
+  tags:
+    - nginx-configuration
+
+- name: NGINX | Create test page
+  command: rm -f /usr/share/nginx/html/index.html && echo "If you see this, then it's time to checkout logs" > /usr/share/nginx/html/index.html
+  tags:
+    - nginx-testpage
+
+- name: Place rsyslog.conf
+  template:
+    src: rsyslog.conf.j2
+    dest: /etc/rsyslog.conf
+  tags:
+    - rsyslog
+  notify:
+    - restart rsyslog
+
+- name: Place auditd.conf
+  template:
+    src: ../templates/auditd.conf.j2
+    dest: /etc/audit/auditd.conf
+  tags:
+    - auditd
+
+- name: Place au-remote.conf
+  template:
+    src: ../templates/au-remote.conf.j2
+    dest: /etc/audisp/plugins.d/au-remote.conf
+  tags:
+    - auditd
+
+- name: Place audisp-remote.conf
+  template:
+    src: ../templates/audisp-remote.conf.j2
+    dest: /etc/audisp/audisp-remote.conf
+  tags:
+    - auditd
+
+- name: Audit watch nginx
+  command: auditctl -w /etc/nginx/ -p aw -k nginx_watch
+
+- name: Reboot web
+  reboot:

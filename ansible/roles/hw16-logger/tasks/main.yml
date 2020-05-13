@@ -1,0 +1,19 @@
+---
+- name: Place rsyslog.conf
+  template:
+    src: rsyslog.conf.j2
+    dest: /etc/rsyslog.conf
+  tags:
+    - rsyslog
+  notify:
+    - restart rsyslog
+
+- name: Place auditd.conf
+  template:
+    src: auditd.conf.j2
+    dest: /etc/audit/auditd.conf
+  tags:
+    - auditd
+
+- name: Reboot logger
+  reboot:
