@@ -12,3 +12,10 @@
   roles:
     - hw16-nginx
   become: true
+
+- name: elk
+  hosts: elk
+  gather_facts: false
+  roles:
+    - hw16-elk
+  become: true

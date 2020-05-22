@@ -36,7 +36,9 @@
     - nginx-configuration
 
 - name: NGINX | Create test page
-  command: rm -f /usr/share/nginx/html/index.html && echo "If you see this, then it's time to checkout logs" > /usr/share/nginx/html/index.html
+  template:
+    src: ../templates/index.html.j2
+    dest: /usr/share/nginx/html/index.html
   tags:
     - nginx-testpage
 

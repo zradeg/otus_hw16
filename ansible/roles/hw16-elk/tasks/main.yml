@@ -1,0 +1,87 @@
+---
+- name: ELK | Place yum config for elasticsearch repo
+  template:
+      src: elasticsearch.repo.j2
+      dest: /etc/yum.repos.d/elasticsearch.repo
+  tags:
+    - elasticsearch-repo
+    - packages
+    - elk
+    - templates
+
+- name: JDK | Install openjdk
+  yum:
+    name: java-1.8.0-openjdk
+    state: latest
+  tags:
+    - elasticsearch
+    - packages
+    - jdk
+
+- name: ELASTICSEARCH | Install elasticsearch package from RPM
+  yum:
+    name: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.6.2-x86_64.rpm
+    state: present
+  tags:
+    - elasticsearch
+    - packages
+  notify:
+    - start elasticsearch
+
+- name: LOGSTASH | Install logstash package from RPM
+  yum:
+    name: https://artifacts.elastic.co/downloads/logstash/logstash-7.6.2.rpm
+    state: present
+  tags:
+    - logstash
+    - packages
+  notify:
+    - start logstash
+
+- name: LOGSTASH | Place input yaml
+  template:
+    src: 02-input.conf.j2
+    dest: /etc/logstash/conf.d/02-input.conf
+  tags:
+    - logstash
+    - templates
+  notify:
+    - restart logstash
+
+- name: LOGSTASH | Place fiter yaml
+  template:
+    src: 10-filter.conf.j2
+    dest: /etc/logstash/conf.d/10-filter.conf
+  tags:
+    - logstash
+    - templates
+  notify:
+    - restart logstash
+
+- name: LOGSTASH | Place output yaml
+  template:
+    src: 20-output.conf.j2
+    dest: /etc/logstash/conf.d/20-output.conf
+  tags:
+    - logstash
+    - templates
+  notify:
+    - restart logstash
+
+- name: KIBANA | Install kibana package from RPM
+  yum:
+    name: https://artifacts.elastic.co/downloads/kibana/kibana-7.6.2-x86_64.rpm
+    state: present
+  tags:
+    - kibana
+    - packages
+  notify:
+    - start kibana
+
+- name: KIBANA | Place kibana yaml
+  template:
+    src: kibana.yml.j2
+    dest: /etc/kibana/kibana.yml
+
+- name: Reboot elk
+  reboot:

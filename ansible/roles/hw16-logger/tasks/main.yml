@@ -1,5 +1,5 @@
 ---
-- name: Place rsyslog.conf
+- name: RSYSLOG | Place rsyslog.conf
   template:
     src: rsyslog.conf.j2
     dest: /etc/rsyslog.conf
@@ -8,12 +8,38 @@
   notify:
     - restart rsyslog
 
-- name: Place auditd.conf
+- name: AUDITD | Place auditd.conf
   template:
     src: auditd.conf.j2
     dest: /etc/audit/auditd.conf
   tags:
     - auditd
+
+- name: FILEBEAT | Place yum config for elasticsearch repo
+  template:
+      src: elasticsearch.repo.j2
+      dest: /etc/yum.repos.d/elasticsearch.repo
+  tags:
+    - elasticsearch-repo
+    - packages
+    - filebeat
+
+- name: FILEBEAT | Install filebeat package from ELASTICSEARCH Repo
+  yum:
+    name: filebeat
+    state: latest
+  tags:
+    - filebeat
+    - packages
+
+- name: FILEBEAT | Place filebeat.yml
+  template:
+    src: filebeat.yml.j2
+    dest: /etc/filebeat/filebeat.yml
+  tags:
+    - filebeat
+  notify:
+    - start filebeat
 
 - name: Reboot logger
   reboot:

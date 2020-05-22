@@ -1,0 +1,23 @@
+output {
+  if [fields][service] == "syslog" {
+    elasticsearch {
+      hosts => ["localhost:9200"]
+      index => "syslog-%{+YYYY.MM.dd}"
+      document_type => "%{[@metadata][type]}"
+    }
+  }
+
+  else if [type] == "nginx_access" {
+    elasticsearch {
+      hosts    => "localhost:9200"
+      index    => "nginx-%{+YYYY.MM.dd}"
+    }
+  }
+
+  else if [type] == "nginx_error" {
+    elasticsearch {
+      hosts    => "localhost:9200"
+      index    => "nginx-%{+YYYY.MM.dd}"
+    }
+  }
+}

@@ -20,3 +20,16 @@
   systemd:
     name: auditd
     state: restarted
+    enabled: yes
+
+- name: start filebeat
+  systemd:
+    name: filebeat
+    state: started
+    enabled: yes
+
+- name: restart filebeat
+  systemd:
+    name: filebeat
+    state: restarted
+    enabled: yes
