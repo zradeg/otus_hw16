@@ -35,12 +35,12 @@
 ##Хосты:
 
 * __web__: поднят nginx, все логи отравляются согласно поставленной задаче на хост __logger__
-* __logger_: накапливает все, пришедшие логи с хоста __web__ и логи nginx отправляет посредством filebeat на хост __elk__
+* __logger__: накапливает все, пришедшие логи с хоста __web__ и отправляет логи nginx посредством filebeat на хост __elk__
 * __elk__: поднят стек elasticsearch-logstash-kibana, logstash принимает пришедшие логи nginx с __logger__, парсит их, складывает в elasticsearch и далее их можно читать в kibana
 
 
 Результат можно увидеть на скриншотах:
 
-![crtindex_01.png](https://github.com/zradeg/otus_hw16/blob/master/screenshot/crtindex_01.png)
-![crtindex_02.png](https://github.com/zradeg/otus_hw16/blob/master/screenshot/crtindex_02.png)
-![crtindex_03.png](https://github.com/zradeg/otus_hw16/blob/master/screenshot/crtindex_03.png)
+![crtindex_01.png](https://github.com/zradeg/otus_hw16/blob/master/screen/crtindex_01.png)
+![crtindex_02.png](https://github.com/zradeg/otus_hw16/blob/master/screen/crtindex_02.png)
+![crtindex_03.png](https://github.com/zradeg/otus_hw16/blob/master/screen/crtindex_03.png)
